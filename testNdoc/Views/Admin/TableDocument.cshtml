@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Documents>
+@{
+    ViewBag.Title = "Каталог компонентов";
+}
+
+
+<table class="table table-sm">
+    <tr>
+        <th>@(ViewBag.SectionName != null ? ViewBag.SectionName : "Имя компонента")</th>
+
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="cursor:pointer;">
+
+                @*@Html.DisplayFor(modelItem => item.Name)*@
+                @*@Html.DisplayFor(modelItem => item.FileName)*@
+                @*<p class="section-item__text"></p>*@
+               
+                <a href="~/Files/@item.FileName" target="_blank">@item.Name</a>
+
+            </td>
+            <td>
+                <a asp-action="EditDocument" asp-controller="Admin" asp-route-id="@item.Id" class="btn btn-warning">Изменить</a>
+                <a asp-action="DeleteDocument" asp-controller="Admin" asp-route-id="@item.Id" class="btn btn-danger">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>
+
+
+
+
+

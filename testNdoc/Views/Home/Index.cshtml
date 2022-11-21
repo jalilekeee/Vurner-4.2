@@ -1,0 +1,107 @@
+﻿    @model IEnumerable<Section>
+@{
+    ViewBag.Title = "Каталог компонентов";
+}
+<section class="section">
+    <div class="section__container container">
+        <div class="section__categories">
+            <button class="section__categories-btn">Каталог документов</button>
+            <ul data-da=".popup-section .popup__inner, 768, last" class="categories section__categories-list">
+                @foreach (var item in Model)
+                {
+                    <li asp-action="TableDocument" data-id=@item.Id class="category section__categories-item">
+                       <p class="category__text">
+                          @Html.DisplayFor(modelItem => item.Name)
+                       </p>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="section__documents">
+            <div class="breadcrumbs">
+                <ul class="breadcrumbs__list">
+                    <li class="breadcrumbs__item">
+                        <a href="/">Главная</a>
+                    </li>
+                    <li class="breadcrumbs__item">
+                        Результаты поиска
+                    </li>
+                </ul>
+            </div>
+            <div class="documents-content documents-content--active section__documents-content">
+                <h2 class="section__documents-title">Последние документы</h2>
+                <ul class="section__documents-list">
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+<script>
+
+     $(document).ready(function() {
+          $(".category").on("click", function(e) {
+              let categoryId = +$(this).attr("data-id");
+              let categoryName = $(this).children().text().trim();
+              GetDocuments(categoryId, categoryName)
+
+            //console.log($(".section__documents-title").text().trim())
+            //$(".section__documents-title").text(nameCategory)
+        })
+        GetLastDocuments()
+
+        //$(".search__btn").on("click", Search())
+     })
+     function GetDocuments(id, categoryName) {
+        $(".breadcrumbs__item:last-child").text(categoryName)
+        $(".breadcrumbs").addClass("show");
+        $.ajax({
+            url: "Home/TableDocument",
+            method: "get",
+            data: { id: id, categoryName: categoryName},
+            success: function (data) {
+                $(".section__documents-title").text(categoryName)
+                $(".section__documents-list").html(data);
+            }
+        })
+    }
+
+    function GetLastDocuments() {
+        $.ajax({
+            url: "Home/GetLastDocuments",
+            method: "get",
+            success: function (data) {
+                $(".section__documents-list").html(data);
+            }
+        })
+    }
+
+    function Search() {
+        let searchValue = document.querySelector(".search__input").value.trim();
+        $(".breadcrumbs").addClass("show");
+        $(".breadcrumbs__item:last-child").text("Результаты поиска")
+            $.ajax({
+                url:"Home/Search",
+                method: "get",
+                data: { name: searchValue },               
+                success: function (data) {
+                    $(".section__documents-title").text(`Результаты поиска по запросу '${searchValue}'`)
+                    $(".section__documents-list").html(data);
+                },               
+                error: function(err) {
+                    console.log("Ошибка поиска")
+                    console.log(err)
+                }
+
+            })
+        }
+
+
+
+
+</script>
+
+
+}

@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+@using testNdoc.Models
+@model Documents
+@{
+    ViewBag.Title = "Удаление пользователя";
+}
+ 
+<div>
+    <dl class="dl-horizontal">
+        <dt>Название документа</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+ 
+
+    </dl>
+ 
+    <div>
+        <form asp-controller="Admin" asp-action="DeleteDocument" method="post">
+            <div class="form-group">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="submit" class="btn btn-danger" value="Удалить" />
+            </div>
+        </form>
+        <a asp-action="Create" class="btn btn-outline-secondary">Назад</a>
+    </div>
+</div>
